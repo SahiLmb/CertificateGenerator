@@ -24,7 +24,7 @@ def generate_certificates(name):
     print('Saving Certificate of:', name)
     
 if __name__ == "__main__":
-    names = ["Sahil Bodke", "Long names wont work"]
+    names = ["Sahil Bodke", "Long names wont work sometimes"]
     # with open('names.txt') as f:
     #     generated_certificates = f.readlines()
     #     for item in generated_certificates:
