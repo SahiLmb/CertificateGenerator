@@ -6,14 +6,15 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.base import MIMEBase
 from email import encoders
-import pandas # to read csv file
+import csv # to read csv file
+from pathlib import Path
 
 # Assigning global variables
-FONT_FILE = ImageFont.truetype(r'font/SwanseaBoldItalic-p3Dv.ttf',  100)
-FONT_COLOR =  "#000000"
+FONT_FILE = ImageFont.truetype(r'font/Product Sans Regular.ttf',  100)
+FONT_COLOR =  "#5F6368"
 
 load_dotenv()
-# access the environment variables
+# access the environment variables with SMTP config
 SMTP_SERVER = os.getenv('SMTP_SERVER')
 SMTP_PORT = os.getenv('SMTP_PORT')
 SMTP_USERNAME = os.getenv('SMTP_USERNAME')
@@ -51,7 +52,7 @@ WIDTH, HEIGHT = template.size
 def generate_certificates(name, email):
     
     # to save as a .png file
-    image_source = Image.open(r'CERT 1.png')
+    image_source = Image.open(r'CERT 1.png') 
     draw = ImageDraw.Draw(image_source)
     name_width, name_height = draw.textsize(name, font=FONT_FILE)
     
@@ -67,11 +68,26 @@ def generate_certificates(name, email):
     print('Saving Certificate of:', name)
     
     # Send email
-    send_email(email, 'Certificate', 'Congratulations! Your certificate is attached below.', certificate_path)
+    send_email(email, 'Your [Event] Certificate is here!', f"Dear {name}, \n\nCongratulations on completing the [Event name] Your certificate is attached.\n\nBest regards,\n[your company]", certificate_path)
     print('Sending email to:', email)
     
+# Function to read names and emails from a CSV file
+def read_receiver_from_csv(csv_file):
+    receiver = []
+    with open(csv_file, 'r') as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            receiver.append((row['Name'], row['Email']))
+    return receiver
+    
+    
 if __name__ == "__main__":
-    names_and_emails = [("Sahil Bodke", "sahilmb2022@gmail.com"), ("Tanmay", "bodkesahil26@gmail.com")]
-    for name, email in names_and_emails:
+    # receiver = [("Sahil", "sahilmb2022@gmail.com"), ("Tanmay", "email2@gmail.com")]
+    # Load recipients from CSV file
+    csv_file_path = Path('mail.csv')  # Update the file path as needed
+    receiver = read_receiver_from_csv(csv_file_path)
+    
+    for name, email in receiver:
         generate_certificates(name, email)
-        print(len(names_and_emails), "certificates done")
+        
+    print(len(receiver), "certificates done")
