@@ -8,6 +8,7 @@ dist/
 .scrapy
 docs/_build/
 
+gmail.py
 # PyBuilder
 target/
 
