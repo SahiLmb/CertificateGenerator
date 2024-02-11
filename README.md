@@ -59,7 +59,7 @@ SMTP_PASSWORD = os.getenv('SMTP_PASSWORD')
 
 <br>
 
-- Creating [MIME](https://en.wikipedia.org/wiki/MIME#:~:text=Multipurpose%20Internet%20Mail%20Extensions%20(MIME,%2C%20images%2C%20and%20application%20programs.) object
+- Creating [MIME](https://en.wikipedia.org/wiki/MIME#:~:text=Multipurpose%20Internet%20Mail%20Extensions%20MIME,%2C%20images%2C%20and%20application%20programs.) object
 ```python
 def send_email(to_email, subject, body, attachment_path):
   # Creating MIME object
@@ -73,27 +73,84 @@ def send_email(to_email, subject, body, attachment_path):
 ```
 <br>
 
-
-
-
-- Placing the name on the certificate and saving to a different directory.
-
+- Attaching certificate
 ```python
-def make_certificates(name):
-    '''Function to save certificates as a .png file
-    Finding the width and height of the text. 
-    Placing it in the center, then making some adjustments.
-    Saving the certificates in a different directory.
-    '''
-    
-    image_source = Image.open(r'template.png')
+ with open(attachment_path, 'rb') as attachment:
+      attachment_part = MIMEBase('application', 'octet-stream')
+      attachment_part.set_payload(attachment.read())
+      encoders.encode_base64(attachment_part)
+      attachment_part.add_header('Content-Disposition', f'attachment; filename={attachment_path}')
+      msg.attach(attachment_part)
+```
+<br>
+
+- Connecting the script to [SMTP](https://www.geeksforgeeks.org/simple-mail-transfer-protocol-smtp/) server to send the mail
+```python
+ server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+      server.starttls()
+      server.login(SMTP_USERNAME, SMTP_PASSWORD)
+      server.sendmail(SMTP_USERNAME, to_email, msg.as_string())
+```
+<br>
+
+- Placing the name on the certificate
+```python
+template = Image.open(r'CERT 1.png')
+WIDTH, HEIGHT = template.size
+
+def generate_certificates(name, email):
+```
+<br>
+
+- Saving the certificate in .png file
+```python
+image_source = Image.open(r'CERT 1.png') 
     draw = ImageDraw.Draw(image_source)
     name_width, name_height = draw.textsize(name, font=FONT_FILE)
-    draw.text(((WIDTH - name_width) / 2, (HEIGHT - name_height) / 2 - 30), name, fill=FONT_COLOR, font=FONT_FILE)
-    
-    image_source.save("./out/" + name +".png")
-    print('Saving Certificate of:', name)        
-
 ```
-
 <br>
+
+- Adjusting the name to be in the middle of certificate
+```python
+'''((WIDTH - name_width)/2, (HEIGHT - name_height)/2 - 50): These are the coordinates where
+the text will be drawn. The (WIDTH - name_width)/2 calculates the horizontal position,centering
+the text on the X-axis, and (HEIGHT - name_height)/2 - 30 calculates the vertical position,
+centering the text on the Y-axis with an additional offset of 50 pixels towards the top.'''
+
+draw.text(((WIDTH - name_width)/2, (HEIGHT - name_height)/2 + 30), name, fill=FONT_COLOR, font=FONT_FILE)
+```
+<br>
+
+- Saving certficates in a different directory
+```python
+certificate_path = "./out/" + name + ".png" 
+    image_source.save(certificate_path)
+    print('Saving Certificate of:', name)
+```
+<br>
+
+- Function to read names and emails from a CSV file
+```python
+def read_receiver_from_csv(csv_file):
+    receiver = []
+    with open(csv_file, 'r') as file:
+        reader = csv.DictReader(file)
+        for row in reader:
+            receiver.append((row['Name'], row['Email']))
+    return receiver
+```
+<br>
+
+- Loading recipients from [](/csv) file
+```python
+if __name__ == "__main__":
+    # receiver = [("Sahil", "sahilmb2022@gmail.com"), ("Tanmay", "email2@gmail.com")]
+    # Load recipients from CSV file
+    csv_file_path = Path('mail.csv')  # Update the file path as needed
+    receiver = read_receiver_from_csv(csv_file_path)
+    
+    for name, email in receiver:
+        generate_certificates(name, email)
+        
+    print(len(receiver), "certificates done")
+```
