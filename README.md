@@ -48,7 +48,8 @@ WIDTH, HEIGHT = template.size
 <br>
 
 - Set Up Environment Variables
-   - Create a new file named .env in the root of your project and add the following content:
+  
+***Create a new file named .env in the root of your project and add the following content:***
 ```env
 SMTP_SERVER=
 SMTP_PORT=
