@@ -141,7 +141,7 @@ def read_receiver_from_csv(csv_file):
 ```
 <br>
 
-- Loading recipients from [](/mail.csv) file
+- Loading recipients from [csv](/mail.csv) file
 ```python
 if __name__ == "__main__":
     # receiver = [("Sahil", "sahilmb2022@gmail.com"), ("Tanmay", "email2@gmail.com")]
