@@ -12,11 +12,11 @@
 
 All you need
 
-1. Certificate
+- Certificate
   - Design a [simple template](template.png) on [Canva](https://www.canva.com/)
-2. Font
+- Font
   - A .ttf (True-Type Font) file like [this](/font), can simply be downloaded from [here](https://www.google.com/search?q=download+.ttf+fonts).
-3. Names
+- Names
   - Finally, a list of names in a .txt format or a .csv format.
 
 ### Import Necessary modules
