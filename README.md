@@ -47,6 +47,16 @@ WIDTH, HEIGHT = template.size
 ```
 <br>
 
+- Set Up Environment Variables
+   - Create a new file named .env in the root of your project and add the following content:
+```env
+SMTP_SERVER=
+SMTP_PORT=
+SMTP_USERNAME=
+SMTP_PASSWORD=
+```
+<br>
+
 - Loading environment variables set in .env file
 ```python
 load_dotenv()
