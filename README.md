@@ -19,11 +19,21 @@ All you need
 - Names
   - Finally, a list of names in a .txt format or a .csv format.
 
-### Pillow module
-
+### Import Necessary modules
+```python
+import os
+from dotenv import load_dotenv
+from PIL import Image, ImageFont, ImageDraw # Imaging library 
+import smtplib # for sending mail
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from email.mime.base import MIMEBase
+from email import encoders
+import csv # to read csv file
+from pathlib import Path
+```
 Using the [pillow module](https://pypi.org/project/Pillow/) to make changes.
 <br>
-
 - Calculating and declaring default values.
 ```python
 from PIL import Image, ImageFont, ImageDraw
@@ -35,8 +45,36 @@ FONT_COLOR = "#FFFFFF"
 template = Image.open(r'template.png')
 WIDTH, HEIGHT = template.size
 ```
+<br>
+
+- Loading environment variables set in .env file
+```python
+load_dotenv()
+# access the environment variables 
+SMTP_SERVER = os.getenv('SMTP_SERVER')
+SMTP_PORT = os.getenv('SMTP_PORT')
+SMTP_USERNAME = os.getenv('SMTP_USERNAME')
+SMTP_PASSWORD = os.getenv('SMTP_PASSWORD')
+```
 
 <br>
+
+- Creating [MIME](https://en.wikipedia.org/wiki/MIME#:~:text=Multipurpose%20Internet%20Mail%20Extensions%20(MIME,%2C%20images%2C%20and%20application%20programs.) object
+```python
+def send_email(to_email, subject, body, attachment_path):
+  # Creating MIME object
+  msg = MIMEMultipart()
+  msg['From'] = SMTP_USERNAME
+  msg['To'] = to_email # receiver
+  msg['Subject'] = subject 
+  
+  # Attach body
+  msg.attach(MIMEText(body, 'plain'))
+```
+<br>
+
+
+
 
 - Placing the name on the certificate and saving to a different directory.
 
