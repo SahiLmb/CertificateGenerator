@@ -129,7 +129,7 @@ certificate_path = "./out/" + name + ".png"
 ```
 <br>
 
-- Function to read names and emails from a CSV file
+- Function to read names and emails from a [CSV](/mail.csv) file
 ```python
 def read_receiver_from_csv(csv_file):
     receiver = []
@@ -141,7 +141,7 @@ def read_receiver_from_csv(csv_file):
 ```
 <br>
 
-- Loading recipients from [](/csv) file
+- Loading recipients from [](/mail.csv) file
 ```python
 if __name__ == "__main__":
     # receiver = [("Sahil", "sahilmb2022@gmail.com"), ("Tanmay", "email2@gmail.com")]
